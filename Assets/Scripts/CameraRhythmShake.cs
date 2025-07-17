@@ -6,18 +6,6 @@ using UnityEngine.Rendering.Universal; // Cambia a Universal para URP
 public class CameraRhythmShake : MonoBehaviour
 {
     private Vector3 originalPos;
-
-    [Header("Shake Effect")]
-    [SerializeField] private bool enableShake = true;
-    [SerializeField] private float shakeDuration = 0f;
-    [SerializeField] private float shakeMagnitude = 0.1f;
-    [SerializeField] private float dampingSpeed = 1.5f;
-
-    [Header("Pulse (Zoom) Effect")]
-    [SerializeField] private bool enablePulse = false;
-    [SerializeField] private float pulseAmount = 0.05f;
-    [SerializeField] private float pulseSpeed = 8f;
-    [SerializeField] private float defaultOrthoSize = 5f;
     private float targetOrthoSize;
     private Camera cam;
 
@@ -31,14 +19,7 @@ public class CameraRhythmShake : MonoBehaviour
     private bool isBumping = false;
     private float bumpProgress = 0f;
 
-    [Header("Color Flash Effect")]
-    [SerializeField] private bool enableColorFlash = false;
-    [SerializeField] private Image flashImage;
-    [SerializeField] private Color flashColor = Color.white;
-    [SerializeField] private float flashFadeSpeed = 4f;
-    private float flashAlpha = 0f;
-
-    [Header("Vignette/Post-Process Effect")]
+    [Header("Vignette Effect")]
     [SerializeField] private bool enableVignette = false;
     [SerializeField] private Volume globalVolume; // Asigna tu Global Volume desde el inspector
     private Vignette vignette;
@@ -67,26 +48,6 @@ public class CameraRhythmShake : MonoBehaviour
 
     void Update()
     {
-      /*   // Shake Effect
-        if (enableShake && shakeDuration > 0)
-        {
-            transform.localPosition = originalPos + Random.insideUnitSphere * shakeMagnitude;
-            shakeDuration -= Time.deltaTime * dampingSpeed;
-        }
-        else
-        {
-            shakeDuration = 0f;
-            if (!isBumping)
-                transform.localPosition = originalPos;
-        } */
-
-        /* // Pulse (Zoom) Effect
-        if (enablePulse && cam != null)
-        {
-            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetOrthoSize, Time.deltaTime * pulseSpeed);
-            if (Mathf.Abs(cam.orthographicSize - targetOrthoSize) < 0.01f)
-                targetOrthoSize = defaultOrthoSize;
-        } */
 
         // Bump Effect (Interpolación por duración, sincronizado con BPM)
         if (enableBump && isBumping)
@@ -99,18 +60,6 @@ public class CameraRhythmShake : MonoBehaviour
                 isBumping = false;
             }
         }
-
-        /* // Color Flash Effect
-        if (enableColorFlash && flashImage != null)
-        {
-            if (flashAlpha > 0f)
-            {
-                flashAlpha = Mathf.MoveTowards(flashAlpha, 0f, Time.deltaTime * flashFadeSpeed);
-                Color c = flashColor;
-                c.a = flashAlpha;
-                flashImage.color = c;
-            }
-        } */
 
         // Vignette/Post-Process Effect (URP)
         if (enableVignette && vignette != null)
@@ -125,23 +74,6 @@ public class CameraRhythmShake : MonoBehaviour
         }
     }
 
-    /* public void TriggerShake(float duration, float magnitude)
-    {
-        if (enableShake)
-        {
-            shakeDuration = duration;
-            shakeMagnitude = magnitude;
-        }
-    }
-
-    public void TriggerPulse()
-    {
-        if (enablePulse && cam != null)
-        {
-            targetOrthoSize = defaultOrthoSize * (1f - pulseAmount);
-        }
-    } */
-
     public void TriggerBump()
     {
         if (enableBump && !isBumping) // Solo activa si no está en bump
@@ -153,17 +85,6 @@ public class CameraRhythmShake : MonoBehaviour
             transform.localPosition = bumpStart;
         }
     }
-
-    /* public void TriggerColorFlash()
-    {
-        if (enableColorFlash && flashImage != null)
-        {
-            flashAlpha = 1f;
-            Color c = flashColor;
-            c.a = flashAlpha;
-            flashImage.color = c;
-        }
-    } */
 
     public void TriggerVignette()
     {

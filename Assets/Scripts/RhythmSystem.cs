@@ -3,7 +3,7 @@ using UnityEngine;
 public class RhythmSystem
 {
     public float perfectPrecision = 0.05f;
-    public float goodPrecision = 0.1f;
+    //public float goodPrecision = 0.1f;
 
     public float bpm;
     public float interval;
@@ -39,10 +39,17 @@ public class RhythmSystem
         return Mathf.Abs(difference) <= perfectPrecision;
     }
 
-    public bool IsGoodBeat()
+    // public bool IsGoodBeat()
+    // {
+    //     float comparedBeat = Mathf.Round(songPositionInBeats);
+    //     float difference = songPositionInBeats - comparedBeat;
+    //     return Mathf.Abs(difference) <= goodPrecision;
+    // }
+
+    public bool IsMissedBeat()
     {
         float comparedBeat = Mathf.Round(songPositionInBeats);
         float difference = songPositionInBeats - comparedBeat;
-        return Mathf.Abs(difference) <= goodPrecision;
+        return Mathf.Abs(difference) > perfectPrecision;
     }
 }

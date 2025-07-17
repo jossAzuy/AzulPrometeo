@@ -16,6 +16,14 @@ public class GameController : MonoBehaviour
 
     [Header("UI Feedback")]
     [SerializeField] private TMPro.TMP_Text feedbackText; // Texto de retroalimentación en la UI
+    [SerializeField] private FloatingFeedbackText floatingFeedback; // Script para animar el feedback
+
+    [Header("Feedback Manager")]
+    [SerializeField] private FeedbackManager feedbackManager; // Asigna el FeedbackManager en el inspector
+
+    [Header("Image Feedback")]
+    [SerializeField] private FloatingFeedbackImage perfectFeedbackImage; // Imagen para aciertos perfectos
+    [SerializeField] private FloatingFeedbackImage missFeedbackImage; // Imagen para errores
 
     public RhythmSystem rhythmSystem { get; private set; }
 
@@ -29,7 +37,9 @@ public class GameController : MonoBehaviour
     private float syncEffectPercent = 0.5f;
 
     [SerializeField] private Image centerIcon;
-    //[SerializeField] private float centerIconShowTime = 0.15f;
+    [SerializeField] private Vector3 centerIconNormalScale = Vector3.one;
+    [SerializeField] private Vector3 centerIconBeatScale = new Vector3(1.3f, 1.3f, 1f);
+    private Coroutine centerIconScaleCoroutine;
     private float centerIconTimer = 0f;
 
     private bool isPerfectBeat = false;
@@ -43,9 +53,14 @@ public class GameController : MonoBehaviour
     {
         rhythmSystem = new RhythmSystem(bpm);
         rhythmSystem.perfectPrecision = perfectPrecision;
-        rhythmSystem.goodPrecision = goodPrecision;
+        //rhythmSystem.goodPrecision = goodPrecision;
         audioSource.Play();
         SetBpmAndSyncEffects(bpm);
+        if (centerIcon != null)
+        {
+            centerIcon.enabled = true;
+            centerIcon.rectTransform.localScale = centerIconNormalScale;
+        }
     }
 
     void Update()
@@ -70,28 +85,36 @@ public class GameController : MonoBehaviour
 
 
         // Comprobación de acierto en el ritmo perfecto sincronizada (solo una vez por beat)
-        if (pendingInput && centerIconTimer > 0f && currentBeat != lastPerfectBeat)
+        if (pendingInput && currentBeat != lastPerfectBeat)
         {
-            Debug.Log($"[INPUT] Espacio presionado en el ritmo PERFECTO | songPositionInBeats: {songPositionInBeats:F3} | beatPosition: {beatPosition:F3} | currentBeat: {currentBeat}");
-            lastPerfectBeat = currentBeat;
-            pendingInput = false;
-
-            // Activar texto de retroalimentación en la UI
-            if (feedbackText != null)
+            if (rhythmSystem != null && rhythmSystem.IsPerfectBeat())
             {
-                Debug.Log("[DEBUG] Activando texto de retroalimentación en la UI.");
-                feedbackText.text = "PERFECT!";
-                feedbackText.enabled = true;
-                StartCoroutine(HideFeedbackTextAfterDelay(0.25f)); // Ocultar después de 1 segundo
+                Debug.Log($"[INPUT] Espacio presionado en el ritmo PERFECTO | songPositionInBeats: {songPositionInBeats:F3} | beatPosition: {beatPosition:F3} | currentBeat: {currentBeat}");
+                lastPerfectBeat = currentBeat;
+                // Usar FeedbackManager para mostrar retroalimentación
+                if (feedbackManager != null && floatingFeedback != null)
+                {
+                    feedbackManager.ShowFeedback(floatingFeedback, transform, "PERFECT!");
+                }
+
+                if (feedbackManager != null && perfectFeedbackImage != null)
+                {
+                    feedbackManager.ShowFeedback(perfectFeedbackImage, transform);
+                }
             }
             else
             {
-                Debug.LogError("[ERROR] feedbackText no está asignado en el inspector.");
+                Debug.Log("[DEBUG] Entrada detectada fuera de la ventana de precisión.");
+                if (feedbackManager != null && floatingFeedback != null)
+                {
+                    feedbackManager.ShowFeedback(floatingFeedback, transform, "MISS!");
+                }
+
+                if (feedbackManager != null && missFeedbackImage != null)
+                {
+                    feedbackManager.ShowFeedback(missFeedbackImage, transform);
+                }
             }
-        }
-        else if (pendingInput && centerIconTimer <= 0f)
-        {
-            Debug.Log("[DEBUG] Entrada detectada fuera de la ventana de precisión.");
             pendingInput = false;
         }
 
@@ -118,21 +141,17 @@ public class GameController : MonoBehaviour
             {
                 sfxSource.PlayOneShot(beatClip);
             }
-            // Mostrar el ícono central y reiniciar temporizador SOLO cuando las flechas llegan al centro
-            // Esto ocurre después del tiempo de viaje
-            StartCoroutine(ShowCenterIconAfterDelay(travelTime, holdTime));
+            // Animar el icono central (siempre visible)
+            if (centerIcon != null)
+            {
+                if (centerIconScaleCoroutine != null)
+                    StopCoroutine(centerIconScaleCoroutine);
+                centerIconScaleCoroutine = StartCoroutine(AnimateCenterIconScale(holdTime));
+            }
             lastBeat = currentBeat;
         }
 
-        // Controla la ventana de precisión y el ícono central
-        if (centerIcon != null && centerIcon.enabled)
-        {
-            centerIconTimer -= Time.deltaTime;
-            if (centerIconTimer <= 0f)
-            {
-                centerIcon.enabled = false;
-            }
-        }
+        // El icono central siempre está visible, no se desactiva
     }
 
     // Métodos de acceso para Rhythm Settings
@@ -156,14 +175,35 @@ public class GameController : MonoBehaviour
     public float GetGoodPrecision() => goodPrecision;
     public void SetGoodPrecision(float value) => goodPrecision = value;
 
-    private System.Collections.IEnumerator ShowCenterIconAfterDelay(float delay, float duration)
+    // Corrutina para animar el escalado del icono central
+    private System.Collections.IEnumerator AnimateCenterIconScale(float holdTime)
     {
-        yield return new WaitForSeconds(delay);
-        if (centerIcon != null)
+        // Escalar rápidamente al tamaño de beat
+        float t = 0f;
+        float scaleUpTime = 0.08f;
+        Vector3 startScale = centerIconNormalScale;
+        Vector3 endScale = centerIconBeatScale;
+        while (t < scaleUpTime)
         {
-            centerIcon.enabled = true;
-            centerIconTimer = duration;
+            t += Time.deltaTime;
+            centerIcon.rectTransform.localScale = Vector3.Lerp(startScale, endScale, t / scaleUpTime);
+            yield return null;
         }
+        centerIcon.rectTransform.localScale = endScale;
+
+        // Mantener el tamaño durante la ventana perfecta
+        yield return new WaitForSeconds(holdTime);
+
+        // Volver suavemente al tamaño original
+        t = 0f;
+        float scaleDownTime = 0.15f;
+        while (t < scaleDownTime)
+        {
+            t += Time.deltaTime;
+            centerIcon.rectTransform.localScale = Vector3.Lerp(endScale, startScale, t / scaleDownTime);
+            yield return null;
+        }
+        centerIcon.rectTransform.localScale = startScale;
     }
 
     private System.Collections.IEnumerator HideFeedbackTextAfterDelay(float delay)
