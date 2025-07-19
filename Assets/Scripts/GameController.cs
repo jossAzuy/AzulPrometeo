@@ -1,3 +1,4 @@
+// ...removed duplicate using and class definition...
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,8 +44,8 @@ public class GameController : MonoBehaviour
     private float centerIconTimer = 0f;
 
     private bool isPerfectBeat = false;
-    // Buffer para entrada de ritmo
-    private bool pendingInput = false;
+    // Buffer para entrada de ritmo (ya no se usa aquí)
+    // private bool pendingInput = false;
 
     // Agrega la referencia al script RhythmArrowMover
     [SerializeField] private RhythmArrowMover arrowMover;
@@ -65,10 +66,6 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        // Detecta si el jugador presionó la tecla
-        if (Input.GetMouseButtonDown(0))
-            pendingInput = true;
-
         HandleRhythm();
     }
 
@@ -82,41 +79,6 @@ public class GameController : MonoBehaviour
 
         // Elimina la comprobación directa de IsPerfectBeat para la ventana
         isPerfectBeat = false;
-
-
-        // Comprobación de acierto en el ritmo perfecto sincronizada (solo una vez por beat)
-        if (pendingInput && currentBeat != lastPerfectBeat)
-        {
-            if (rhythmSystem != null && rhythmSystem.IsPerfectBeat())
-            {
-                Debug.Log($"[INPUT] Espacio presionado en el ritmo PERFECTO | songPositionInBeats: {songPositionInBeats:F3} | beatPosition: {beatPosition:F3} | currentBeat: {currentBeat}");
-                lastPerfectBeat = currentBeat;
-                // Usar FeedbackManager para mostrar retroalimentación
-                if (feedbackManager != null && floatingFeedback != null)
-                {
-                    feedbackManager.ShowFeedback(floatingFeedback, transform, "PERFECT!");
-                }
-
-                if (feedbackManager != null && perfectFeedbackImage != null)
-                {
-                    feedbackManager.ShowFeedback(perfectFeedbackImage, transform);
-                }
-            }
-            else
-            {
-                Debug.Log("[DEBUG] Entrada detectada fuera de la ventana de precisión.");
-                if (feedbackManager != null && floatingFeedback != null)
-                {
-                    feedbackManager.ShowFeedback(floatingFeedback, transform, "MISS!");
-                }
-
-                if (feedbackManager != null && missFeedbackImage != null)
-                {
-                    feedbackManager.ShowFeedback(missFeedbackImage, transform);
-                }
-            }
-            pendingInput = false;
-        }
 
         // Sincroniza efectos y ventana de precisión cuando las flechas llegan al centro
         if (currentBeat != lastBeat)
@@ -153,6 +115,48 @@ public class GameController : MonoBehaviour
 
         // El icono central siempre está visible, no se desactiva
     }
+
+    // Nuevo: Método público para registrar la entrada de ritmo desde PlayerController
+public void RegisterRhythmInput(UnityEngine.Transform feedbackTarget = null)
+{
+    float songPositionInBeats = rhythmSystem.songPositionInBeats;
+    float beatPosition = rhythmSystem.beatPosition;
+    int currentBeat = rhythmSystem.GetCurrentBeat();
+
+    // Solo permitir un registro por beat
+    if (currentBeat == lastPerfectBeat)
+        return;
+
+    if (rhythmSystem != null && rhythmSystem.IsPerfectBeat())
+    {
+        UnityEngine.Debug.Log($"[INPUT] Espacio presionado en el ritmo PERFECTO | songPositionInBeats: {songPositionInBeats:F3} | beatPosition: {beatPosition:F3} | currentBeat: {currentBeat}");
+        lastPerfectBeat = currentBeat;
+        // Usar FeedbackManager para mostrar retroalimentación
+        if (feedbackManager != null && floatingFeedback != null)
+        {
+            feedbackManager.ShowFeedback(floatingFeedback, feedbackTarget != null ? feedbackTarget : base.transform, "PERFECT!");
+        }
+
+        if (feedbackManager != null && perfectFeedbackImage != null)
+        {
+            feedbackManager.ShowFeedback(perfectFeedbackImage, feedbackTarget != null ? feedbackTarget : base.transform);
+        }
+    }
+    else
+    {
+        UnityEngine.Debug.Log("[DEBUG] Entrada detectada fuera de la ventana de precisión.");
+        if (feedbackManager != null && floatingFeedback != null)
+        {
+            feedbackManager.ShowFeedback(floatingFeedback, feedbackTarget != null ? feedbackTarget : base.transform, "MISS!");
+        }
+
+        if (feedbackManager != null && missFeedbackImage != null)
+        {
+            feedbackManager.ShowFeedback(missFeedbackImage, feedbackTarget != null ? feedbackTarget : base.transform);
+        }
+    }
+}
+
 
     // Métodos de acceso para Rhythm Settings
     public float GetBpm() => bpm;

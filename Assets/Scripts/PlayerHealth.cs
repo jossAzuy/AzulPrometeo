@@ -19,7 +19,9 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Slider healthSlider; // Asigna el componente Slider en el inspector
 
     [Header("Game Over Settings")]
-    [SerializeField] private GameObject gameOverMenu; // Asigna el menú de Game Over en el inspector
+    [SerializeField] private GameOverManager gameOverManager; // Referencia al GameOverManager
+    [SerializeField] private MonoBehaviour[] scriptsToDisable; // Scripts a desactivar al Game Over
+    [SerializeField] private GameObject objectToDisable; // Objeto a desactivar al Game Over
 
     private int currentLives;
 
@@ -39,12 +41,24 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(InvulnerabilityCoroutine());
         if (currentLives == 0)
         {
-            Debug.Log("El jugador ha perdido todas sus vidas.");
-            if (gameOverMenu != null)
+            Debug.Log("El jugador ha perdido toda su salud.");
+            if (gameOverManager != null)
             {
-                gameOverMenu.SetActive(true); // Mostrar el menú de Game Over
+                gameOverManager.ShowGameOverMenu();
             }
-            // Aquí puedes agregar lógica adicional de Game Over
+            // Desactivar scripts
+            if (scriptsToDisable != null)
+            {
+                foreach (var script in scriptsToDisable)
+                {
+                    if (script != null) script.enabled = false;
+                }
+            }
+            // Desactivar objeto específico
+            if (objectToDisable != null)
+            {
+                objectToDisable.SetActive(false);
+            }
         }
     }
 

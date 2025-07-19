@@ -28,7 +28,29 @@ public class PlayerController : MonoBehaviour
     private int currentAmmo;
     private bool isReloading = false;
 
+    [Header("Dash Settings")]
+    [SerializeField] private float dashForce = 10f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
+    [Header("Perfect Beat Dash Settings")]
+    [SerializeField] private float perfectDashForce = 15f;
+    [SerializeField] private float perfectDashDuration = 0.3f;
+    [SerializeField] private float perfectDashCooldown = 0.5f;
+    private bool isDashing = false;
+    private float dashCooldownTimer = 0f;
+    private Vector2 dashDirection;
+    private Rigidbody2D rb;
+    private bool isPerfectDash = false;
+
     private SpriteRenderer spriteRenderer; // Referencia al SpriteRenderer del jugador
+
+    [Header("Dash Visuals")]
+    [SerializeField] private TrailRenderer dashTrail;
+    [Header("Dash Feedback")]
+    [SerializeField] private FeedbackManager feedbackManager;
+    [SerializeField] private FloatingFeedbackText dashFeedbackText;
+    [SerializeField] private Transform dashFeedbackOrigin;
+    [SerializeField] private FloatingFeedbackImage dashFeedbackImage;
 
     public event Action OnAmmoChanged;
     public event Action OnReload;
@@ -36,6 +58,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -59,6 +82,30 @@ public class PlayerController : MonoBehaviour
 
         // Lógica de disparo conectada al ritmo
         HandleShooting();
+
+        // Dash cooldown
+        if (dashCooldownTimer > 0f)
+            dashCooldownTimer -= Time.deltaTime;
+
+        // Manejar Dash
+        if (!isDashing && dashCooldownTimer <= 0f && Input.GetKeyDown(KeyCode.Space))
+        {
+            float moveHorizontal = Input.GetAxisRaw("Horizontal");
+            float moveVertical = Input.GetAxisRaw("Vertical");
+            Vector2 inputDir = new Vector2(moveHorizontal, moveVertical);
+            if (inputDir.sqrMagnitude > 0.01f)
+            {
+                dashDirection = inputDir.normalized;
+                // Llama a GameController para mostrar la retroalimentación visual de dash
+                if (gameController != null)
+                {
+                    gameController.RegisterRhythmInput(transform);
+                }
+                // Determina si el dash fue perfecto para la física, pero la retroalimentación visual la maneja GameController
+                isPerfectDash = gameController != null && gameController.rhythmSystem != null && gameController.rhythmSystem.IsPerfectBeat();
+                StartCoroutine(DashCoroutine());
+            }
+        }
     }
 
     void Start()
@@ -102,6 +149,12 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Sin munición o recargando. No se puede disparar.");
                 return; // Salir sin activar la lógica de disparo
             }
+            // Llama a GameController para procesar la retroalimentación de ritmo
+            if (gameController != null)
+            {
+                gameController.RegisterRhythmInput(transform);
+            }
+            // El disparo ocurre igual, pero la retroalimentación visual de ritmo la maneja GameController
             bool isPerfect = gameController != null && gameController.rhythmSystem != null && gameController.rhythmSystem.IsPerfectBeat();
             Shoot(isPerfect);
             currentAmmo--;
@@ -144,6 +197,25 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Recarga completa");
         OnReload?.Invoke();
         OnAmmoChanged?.Invoke();
+    }
+
+    private System.Collections.IEnumerator DashCoroutine()
+    {
+        isDashing = true;
+        if (dashTrail != null) dashTrail.emitting = true;
+        // La retroalimentación visual de dash ahora la maneja GameController
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+        float force = isPerfectDash ? perfectDashForce : dashForce;
+        float duration = isPerfectDash ? perfectDashDuration : dashDuration;
+        float cooldown = isPerfectDash ? perfectDashCooldown : dashCooldown;
+        rb.linearVelocity = dashDirection * force;
+        yield return new WaitForSeconds(duration);
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        dashCooldownTimer = cooldown;
+        if (dashTrail != null) dashTrail.emitting = false;
     }
 
     public int GetCurrentAmmo()
