@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4088206821263767648}
   - component: {fileID: 8895273816842754642}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: SimpleEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,10 +208,13 @@ MonoBehaviour:
   moveSpeed: 2
   attackRange: 1.5
   visionRange: 5
-  damage: 1
+  damage: 10
   target: {fileID: 0}
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
   feedbackManager: {fileID: 0}
   feedbackOrigin: {fileID: 7956993275338342636}
+  alwaysFollowPlayer: 1
+  dropCoinsOnDeath: 1
+  coinPrefab: {fileID: 3039977590952991178, guid: f29304135d41af64d95070d613756b81, type: 3}

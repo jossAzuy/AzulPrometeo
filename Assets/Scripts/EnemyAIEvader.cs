@@ -1,37 +1,38 @@
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAIEvader : MonoBehaviour
 {
-
     [Header("Health Settings")]
     [SerializeField] private int maxHealth;
-    [SerializeField] private FloatingFeedbackText floatingFeedback; // Asigna el prefab/script de feedback en el inspector
+    [SerializeField] private FloatingFeedbackText floatingFeedback;
     private int currentHealth;
 
     [Header("Rythm Settings")]
-    [SerializeField] public GameController gameController; // Asigna el GameController en el inspector
+    [SerializeField] public GameController gameController;
 
     [Header("Enemy Settings")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float visionRange = 5f;
     [SerializeField] private int damage = 1;
-    [SerializeField] public Transform target; // Asigna el Player en el inspector
-
-    [Header("Patrol Settings")]
-    [SerializeField] private Transform[] patrolPoints;
-    private int currentPatrolIndex = 0;
+    [SerializeField] public Transform target;
 
     [Header("Feedback Settings")]
-    [SerializeField] private FeedbackManager feedbackManager; // Asigna el FeedbackManager en el inspector
-    [SerializeField] private Transform feedbackOrigin; // Posición de origen del feedback asignada en el inspector
-
-    [Header("Enemy Variant")]
-    public bool alwaysFollowPlayer = false;
+    [SerializeField] private FeedbackManager feedbackManager;
+    [SerializeField] private Transform feedbackOrigin;
 
     [Header("Drop Settings")]
     public bool dropCoinsOnDeath = false;
     public GameObject coinPrefab;
+
+    [Header("Enemy Variant")]
+    public bool alwaysFollowPlayer = false;
+
+    [Header("Evade Settings")]
+    [SerializeField] private float evadeChance = 0.5f; // Probabilidad de esquivar (0-1)
+    [SerializeField] private float evadeDistance = 1.5f; // Distancia lateral de esquiva
+
+
 
     private void Start()
     {
@@ -40,22 +41,20 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        // Solo moverse/atacar durante el beat
         if (gameController == null || gameController.rhythmSystem == null || !gameController.rhythmSystem.IsPerfectBeat())
             return;
 
         if (target == null)
-        {
-            Patrol();
             return;
-        }
 
+        float distanceToPlayer = Vector3.Distance(transform.position, target.position);
+
+        // Copia la lógica de EnemyAI pero usa FollowPlayerWithEvade en vez de FollowPlayer
         if (alwaysFollowPlayer)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, target.position);
             if (distanceToPlayer > attackRange)
             {
-                FollowPlayer();
+                FollowPlayerWithEvade();
             }
             else
             {
@@ -64,55 +63,52 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, target.position);
             if (distanceToPlayer <= visionRange)
             {
                 if (distanceToPlayer > attackRange)
                 {
-                    FollowPlayer();
+                    FollowPlayerWithEvade();
                 }
                 else
                 {
                     Attack();
                 }
             }
-            else
-            {
-                Patrol();
-            }
+            // Si quieres patrulla, aquí podrías agregar lógica de patrulla opcional
         }
     }
 
-    private void FollowPlayer()
+    // Igual que FollowPlayer pero con esquiva
+    private void FollowPlayerWithEvade()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
-        transform.position += direction * moveSpeed * Time.deltaTime;
-    }
-
-    private void Patrol()
-    {
-        if (patrolPoints == null || patrolPoints.Length == 0) return;
-
-        Transform patrolTarget = patrolPoints[currentPatrolIndex];
-        Vector3 direction = (patrolTarget.position - transform.position).normalized;
-        transform.position += direction * moveSpeed * Time.deltaTime;
-
-        float distance = Vector3.Distance(transform.position, patrolTarget.position);
-        if (distance < 0.2f)
+        Vector3 toPlayer = target.position - transform.position;
+        if (toPlayer.sqrMagnitude < 0.0001f)
         {
-            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+            toPlayer = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), 0f).normalized;
         }
+        else
+        {
+            toPlayer = toPlayer.normalized;
+        }
+        Vector3 evadeDir = Vector3.zero;
+        if (Random.value < evadeChance)
+        {
+            Vector3 perp = Vector3.Cross(toPlayer, Vector3.forward).normalized;
+            if (Random.value < 0.5f)
+                perp = -perp;
+            evadeDir = perp * evadeDistance;
+        }
+        Vector3 moveDir = (toPlayer + evadeDir).normalized;
+        transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
 
     private void Attack()
     {
-        // Daño al jugador si tiene el componente PlayerHealth
         PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(damage);
         }
-        // Debug.Log("Enemigo ataca al jugador y causa " + damage + " de daño.");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -122,8 +118,8 @@ public class EnemyAI : MonoBehaviour
             Bullet bullet = collision.GetComponent<Bullet>();
             if (bullet != null)
             {
-                TakeDamage(bullet.damage); // Usar el daño de la bala
-                Destroy(collision.gameObject); // Destruir la bala
+                TakeDamage(bullet.damage);
+                Destroy(collision.gameObject);
             }
         }
     }
@@ -133,9 +129,8 @@ public class EnemyAI : MonoBehaviour
         currentHealth -= amount;
         if (feedbackManager != null && floatingFeedback != null && feedbackOrigin != null)
         {
-            feedbackManager.ShowFeedback(floatingFeedback, feedbackOrigin,amount.ToString());
+            feedbackManager.ShowFeedback(floatingFeedback, feedbackOrigin, amount.ToString());
         }
-        // Debug.Log($"Salud actual del enemigo después de recibir daño: {currentHealth}");
         if (currentHealth <= 0)
         {
             if (dropCoinsOnDeath && coinPrefab != null)
