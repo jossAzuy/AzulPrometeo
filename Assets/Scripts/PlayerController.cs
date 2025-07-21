@@ -52,6 +52,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform dashFeedbackOrigin;
     [SerializeField] private FloatingFeedbackImage dashFeedbackImage;
 
+    [Header("Animation Settings")]
+    [SerializeField] private Animator animator; // Reference to the Animator component
+
     public event Action OnAmmoChanged;
     public event Action OnReload;
 
@@ -178,6 +181,12 @@ public class PlayerController : MonoBehaviour
             Instantiate(prefabToUse, firePoint.position, firePoint.rotation);
             Debug.Log(isPerfect ? "Disparo PERFECTO" : "Disparo normal");
             if (soundManager != null) soundManager.PlayShoot();
+
+            // Trigger the shooting animation
+            if (animator != null)
+            {
+                animator.SetTrigger("Shoot");
+            }
         }
         else
         {

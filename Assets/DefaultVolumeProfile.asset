@@ -306,10 +306,10 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 1.31
   intensity:
     m_OverrideState: 1
-    m_Value: 0.03
+    m_Value: 26.47
   scatter:
     m_OverrideState: 1
     m_Value: 0.7
@@ -461,19 +461,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf1aba9553839d41ae37dd52e9ebcce, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   mode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   quality:
     m_OverrideState: 1
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.506
   clamp:
     m_OverrideState: 1
-    m_Value: 0.05
+    m_Value: 0.1291
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,13 +521,13 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 1, y: 0.9705983, z: 0.9062315, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 0.81699187, y: 0.8667156, z: 1, w: 0}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 0.9383681, y: 0.8823518, z: 1, w: 0}
 --- !u!114 &1247868777620691934
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -600,10 +600,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e1dc532bcb41949b58bc4f2abfbb7e, type: 3}
   m_Name: LensDistortion
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   intensity:
-    m_OverrideState: 1
-    m_Value: 0
+    m_OverrideState: 0
+    m_Value: 0.103
   xMultiplier:
     m_OverrideState: 1
     m_Value: 1
@@ -650,7 +650,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.09
 --- !u!114 &5762530381802164056
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -663,10 +663,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06437c1ff663d574d9447842ba0a72e4, type: 3}
   m_Name: ScreenSpaceLensFlare
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 5
   tintColor:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -675,13 +675,13 @@ MonoBehaviour:
     m_Value: 1
   firstFlareIntensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   secondaryFlareIntensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 7.2
   warpedFlareIntensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   warpedFlareScale:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1}
@@ -693,13 +693,13 @@ MonoBehaviour:
     m_Value: 0.5
   vignetteEffect:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   startingPosition:
     m_OverrideState: 1
-    m_Value: 1.25
+    m_Value: 1.055
   scale:
     m_OverrideState: 1
-    m_Value: 1.5
+    m_Value: 4
   streaksIntensity:
     m_OverrideState: 1
     m_Value: 0
@@ -736,7 +736,7 @@ MonoBehaviour:
     m_Value: 0
   contrast:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 15
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -745,7 +745,7 @@ MonoBehaviour:
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 5
 --- !u!114 &8549655192814258499
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -789,7 +789,7 @@ MonoBehaviour:
   active: 1
   distance:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.01
   cropToFit:
     m_OverrideState: 1
     m_Value: 1

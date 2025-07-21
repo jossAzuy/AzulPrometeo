@@ -1,7 +1,16 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+    [Header("Dash Variant")]
+    [SerializeField] public bool canDash = false;
+    [SerializeField] private float dashSpeed = 8f;
+    [SerializeField] private float dashCooldown = 3f;
+    [SerializeField] private float dashDuration = 0.2f;
+    private float dashTimer = 0f;
+    private float dashTimeLeft = 0f;
+    private bool isDashing = false;
 
     [Header("Health Settings")]
     [SerializeField] private int maxHealth;
@@ -9,22 +18,22 @@ public class EnemyAI : MonoBehaviour
     private int currentHealth;
 
     [Header("Rythm Settings")]
-    [SerializeField] public GameController gameController; // Asigna el GameController en el inspector
+    public GameController gameController; // Asigna el GameController en el inspector
 
     [Header("Enemy Settings")]
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float visionRange = 5f;
     [SerializeField] private int damage = 1;
-    [SerializeField] public Transform target; // Asigna el Player en el inspector
+    private Transform target; // Asigna el Player en el inspector
 
     [Header("Patrol Settings")]
     [SerializeField] private Transform[] patrolPoints;
     private int currentPatrolIndex = 0;
 
     [Header("Feedback Settings")]
-    [SerializeField] private FeedbackManager feedbackManager; // Asigna el FeedbackManager en el inspector
-    [SerializeField] private Transform feedbackOrigin; // Posición de origen del feedback asignada en el inspector
+    private FeedbackManager feedbackManager; // Inicializado automáticamente
+    private Transform feedbackOrigin; // Inicializado automáticamente
 
     [Header("Enemy Variant")]
     public bool alwaysFollowPlayer = false;
@@ -33,16 +42,78 @@ public class EnemyAI : MonoBehaviour
     public bool dropCoinsOnDeath = false;
     public GameObject coinPrefab;
 
+    [Header("Area Shoot Variant")]
+    [SerializeField] public bool canShootArea = false;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private int bulletsPerShot = 8;
+    [SerializeField] private float shootCooldown = 2f;
+    // [SerializeField] private float bulletSpeed = 6f;
+    private float shootTimer = 0f;
+
+    [Header("Death Effects")]
+    [SerializeField] private GameObject deathParticlesPrefab; // Prefab del efecto de partículas al morir
+
+
+    private Animator animator; // Referencia al Animator
+    private SpriteRenderer spriteRenderer; // Referencia al SpriteRenderer
+
     private void Start()
     {
         currentHealth = maxHealth;
+
+        // Inicializar Animator
+        animator = GetComponent<Animator>();
+
+        // Inicializar FeedbackManager y feedbackOrigin automáticamente
+        feedbackManager = Object.FindAnyObjectByType<FeedbackManager>();
+        feedbackOrigin = transform;
+
+        // Obtener referencia al SpriteRenderer
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        // Solo moverse/atacar durante el beat
+        // Solo moverse/atacar/disparar/dash durante el beat
         if (gameController == null || gameController.rhythmSystem == null || !gameController.rhythmSystem.IsPerfectBeat())
             return;
+
+        // Dash
+        if (canDash)
+        {
+            if (isDashing)
+            {
+                DashTowardsPlayer();
+                dashTimeLeft -= Time.deltaTime;
+                if (dashTimeLeft <= 0f)
+                {
+                    isDashing = false;
+                    dashTimer = dashCooldown;
+                }
+                return;
+            }
+            else
+            {
+                dashTimer -= Time.deltaTime;
+                if (dashTimer <= 0f && target != null)
+                {
+                    StartDash();
+                    return;
+                }
+            }
+        }
+
+        // Disparo circular
+        if (canShootArea)
+        {
+            shootTimer -= Time.deltaTime;
+            if (shootTimer <= 0f)
+            {
+                ShootAreaAttack();
+                shootTimer = shootCooldown;
+            }
+        }
 
         if (target == null)
         {
@@ -80,6 +151,33 @@ public class EnemyAI : MonoBehaviour
             {
                 Patrol();
             }
+        }
+    }
+
+    private void StartDash()
+    {
+        isDashing = true;
+        dashTimeLeft = dashDuration;
+    }
+
+    private void DashTowardsPlayer()
+    {
+        if (target == null) return;
+        Vector3 direction = (target.position - transform.position).normalized;
+        transform.position += direction * dashSpeed * Time.deltaTime;
+    }
+
+    private void ShootAreaAttack()
+    {
+        if (bulletPrefab == null || shootPoint == null) return;
+        float angleStep = 360f / bulletsPerShot;
+        float angle = 0f;
+        for (int i = 0; i < bulletsPerShot; i++)
+        {
+            Quaternion rot = Quaternion.Euler(0, 0, angle);
+            GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, rot);
+            // La bala usará transform.right como dirección inicial
+            angle += angleStep;
         }
     }
 
@@ -133,11 +231,22 @@ public class EnemyAI : MonoBehaviour
         currentHealth -= amount;
         if (feedbackManager != null && floatingFeedback != null && feedbackOrigin != null)
         {
-            feedbackManager.ShowFeedback(floatingFeedback, feedbackOrigin,amount.ToString());
+            feedbackManager.ShowFeedback(floatingFeedback, feedbackOrigin, amount.ToString());            
         }
-        // Debug.Log($"Salud actual del enemigo después de recibir daño: {currentHealth}");
+
+        // Ejecutar la animación de recibir daño
+        if (animator != null)
+        {
+            animator.SetTrigger("TakeDamage");
+        }
+
         if (currentHealth <= 0)
         {
+            if (deathParticlesPrefab != null)
+            {
+                Instantiate(deathParticlesPrefab, transform.position, Quaternion.identity);
+            }
+
             if (dropCoinsOnDeath && coinPrefab != null)
             {
                 int coins = Random.Range(1, 4);
@@ -147,8 +256,28 @@ public class EnemyAI : MonoBehaviour
                     Instantiate(coinPrefab, transform.position + offset, Quaternion.identity);
                 }
             }
-            Destroy(gameObject);
+
+            // Reproducir efecto de sonido al morir
+            SoundManager.Instance.PlayEnemyDeath();
+
+            // Ejecutar la animación de explosión antes de destruir el objeto
+            if (animator != null)
+            {
+                animator.SetTrigger("Explode");
+                StartCoroutine(DestroyAfterAnimation());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
+    }
+
+    private IEnumerator DestroyAfterAnimation()
+    {
+        // Usar un valor fijo para la duración de la animación de explosión
+        yield return new WaitForSeconds(0.1f); // Cambia 0.1f por la duración deseada en segundos
+        Destroy(gameObject);
     }
 
     public void Setup(GameController gc, Transform tgt, FeedbackManager fbManager, FloatingFeedbackText floatingText)
