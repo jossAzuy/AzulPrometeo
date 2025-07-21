@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject[] enemyPrefabs; // Cambiado a un array de prefabs
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float spawnInterval = 3f;
     [SerializeField] private int maxEnemies = 10;
@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (enemyPrefab == null || spawnPoints.Length == 0) return;
+        if (enemyPrefabs.Length == 0 || spawnPoints.Length == 0) return;
         timer += Time.deltaTime;
         if (timer >= spawnInterval && currentEnemies < maxEnemies)
         {
@@ -30,13 +30,19 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        int index = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[index];
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        if (enemyPrefabs.Length == 0) return; // Validar que haya prefabs disponibles
+        int prefabIndex = Random.Range(0, enemyPrefabs.Length);
+        GameObject selectedPrefab = enemyPrefabs[prefabIndex];
+
+        int spawnIndex = Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[spawnIndex];
+        GameObject enemy = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation);
         currentEnemies++;
+
         // Añadir componente auxiliar para notificar destrucción
         EnemyDespawnNotifier notifier = enemy.AddComponent<EnemyDespawnNotifier>();
         notifier.spawner = this;
+
         // Asignar referencias al EnemyAI usando Setup
         EnemyAI ai = enemy.GetComponent<EnemyAI>();
         if (ai != null)

@@ -1,0 +1,581 @@
+fileFormatVersion: 2
+guid: 6797df543fdc02a46a57f54bf020c079
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1916999900988480271
+    second: Sprite sheet_NewEnemies_0
+  - first:
+      213: 4541466669817899885
+    second: Sprite sheet_NewEnemies_1
+  - first:
+      213: -1017094255694280598
+    second: Sprite sheet_NewEnemies_2
+  - first:
+      213: 6016742317558632231
+    second: Sprite sheet_NewEnemies_3
+  - first:
+      213: -3061836821334669555
+    second: Sprite sheet_NewEnemies_4
+  - first:
+      213: 1068829351845099101
+    second: Sprite sheet_NewEnemies_5
+  - first:
+      213: 4464633917209196111
+    second: Sprite sheet_NewEnemies_6
+  - first:
+      213: -8812680178205191893
+    second: Sprite sheet_NewEnemies_7
+  - first:
+      213: -6229537368014255508
+    second: Sprite sheet_NewEnemies_8
+  - first:
+      213: 6731620617615319085
+    second: Sprite sheet_NewEnemies_9
+  - first:
+      213: -5735679434352723555
+    second: Sprite sheet_NewEnemies_10
+  - first:
+      213: -6543966418737845074
+    second: Sprite sheet_NewEnemies_11
+  - first:
+      213: -2881797072733943112
+    second: Sprite sheet_NewEnemies_12
+  - first:
+      213: -7754703968110526558
+    second: Sprite sheet_NewEnemies_13
+  - first:
+      213: -5056012654256996056
+    second: Sprite sheet_NewEnemies_14
+  - first:
+      213: 8853413501952246508
+    second: Sprite sheet_NewEnemies_15
+  - first:
+      213: 3328910859419105096
+    second: Sprite sheet_NewEnemies_16
+  - first:
+      213: -7476926350798090204
+    second: Sprite sheet_NewEnemies_17
+  - first:
+      213: 7236642378194273899
+    second: Sprite sheet_NewEnemies_18
+  - first:
+      213: -5003065913394220014
+    second: Sprite sheet_NewEnemies_19
+  - first:
+      213: 2589890769469774218
+    second: Sprite sheet_NewEnemies_20
+  - first:
+      213: -3689856627515472546
+    second: Sprite sheet_NewEnemies_21
+  - first:
+      213: 4037175305622199891
+    second: Sprite sheet_NewEnemies_22
+  - first:
+      213: -8234846036908730379
+    second: Sprite sheet_NewEnemies_23
+  - first:
+      213: -3228104431607480174
+    second: Sprite sheet_NewEnemies_24
+  - first:
+      213: 2959047296777481718
+    second: Sprite sheet_NewEnemies_25
+  - first:
+      213: 1067598201662121810
+    second: Sprite sheet_NewEnemies_26
+  - first:
+      213: 7451514871023629634
+    second: Sprite sheet_NewEnemies_27
+  - first:
+      213: 1158382924529871589
+    second: Sprite sheet_NewEnemies_28
+  - first:
+      213: -1704290870750882712
+    second: Sprite sheet_NewEnemies_29
+  - first:
+      213: -6787087346294155308
+    second: Sprite sheet_NewEnemies_30
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_14
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 684
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 821c123674f65d9b0800000000000000
+      internalID: -5056012654256996056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_15
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 509
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce2c2813ca4adda70800000000000000
+      internalID: 8853413501952246508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_17
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 510
+        width: 72
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4201ce0391f9c3890800000000000000
+      internalID: -7476926350798090204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_19
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 510
+        width: 69
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 214b5442f0a819ab0800000000000000
+      internalID: -5003065913394220014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_20
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 510
+        width: 72
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a891f49dee321f320800000000000000
+      internalID: 2589890769469774218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_21
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 509
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e55c1dc62fefaccc0800000000000000
+      internalID: -3689856627515472546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_23
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 361
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f79506d823f7bd80800000000000000
+      internalID: -8234846036908730379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_25
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 362
+        width: 72
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fd6006b6d5a01920800000000000000
+      internalID: 2959047296777481718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_27
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 362
+        width: 69
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24577ed9b49196760800000000000000
+      internalID: 7451514871023629634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_28
+      rect:
+        serializedVersion: 2
+        x: 1179
+        y: 362
+        width: 72
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ea2b7ae127631010800000000000000
+      internalID: 1158382924529871589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_29
+      rect:
+        serializedVersion: 2
+        x: 1264
+        y: 361
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 864d3f69b742958e0800000000000000
+      internalID: -1704290870750882712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_0
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 662
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0aa578839d41a542b79145df83f1ced
+      internalID: -2004324645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_1
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 662
+        width: 85
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b76f364304acf3e41b21afeca32fea3a
+      internalID: -1777010208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_2
+      rect:
+        serializedVersion: 2
+        x: 1103
+        y: 662
+        width: 80
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5aa2dd1d53d666046852fefc850b72b7
+      internalID: -902610174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_3
+      rect:
+        serializedVersion: 2
+        x: 1195
+        y: 661
+        width: 71
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1059fadfc48b61843979bccfc866131e
+      internalID: -464614198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite sheet_NewEnemies_4
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 663
+        width: 74
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee39efd5744b4143a5041b9fc8659b6
+      internalID: 2110393374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 200ddc29310504041bfc5ce62ee6ee8d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Sprite sheet_NewEnemies_0: -2004324645
+      Sprite sheet_NewEnemies_1: -1777010208
+      Sprite sheet_NewEnemies_2: -902610174
+      Sprite sheet_NewEnemies_3: -464614198
+      Sprite sheet_NewEnemies_31: -1429248922
+      Sprite sheet_NewEnemies_4: 2110393374
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

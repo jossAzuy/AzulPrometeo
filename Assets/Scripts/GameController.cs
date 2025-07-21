@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
 
     public RhythmSystem rhythmSystem { get; private set; }
 
-    [SerializeField] private CameraRhythmShake cameraShake; // Arrastra tu cámara con este script en el inspector
+    [SerializeField] private CameraRhythmEffects cameraShake; // Arrastra tu cámara con este script en el inspector
 
     private int lastBeat = -1;
     private int lastPerfectBeat = -1; // Nuevo: último beat perfecto registrado
